@@ -42,4 +42,4 @@ app.listen(port, function () {
 });
 
 // Database Connection
-
+let uri = process.env.DB_URI;
