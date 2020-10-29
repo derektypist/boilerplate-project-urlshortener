@@ -40,6 +40,13 @@ app.listen(port, function () {
 let uri = process.env.DB_URI;
 mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
+let urlSchema = new mongoose.Schema({
+  original_url: {type: String, required: true},
+  short_url: Number
+});
+
+let Url = mongoose.model('Url', urlSchema);
+
 app.post("/api/shorturl/new", function (req, res) {
   res.json({original_url: 'https://www.freecodecamp.org', short_url: 1});
 });
