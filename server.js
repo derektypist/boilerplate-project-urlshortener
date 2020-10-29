@@ -40,3 +40,6 @@ app.get("/api/shorturl/<short_url>", function (req, res) {
 app.listen(port, function () {
   console.log('Node.js listening ...');
 });
+
+// Database Connection
+
