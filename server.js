@@ -26,10 +26,15 @@ app.get('/', function(req, res){
 });
 
   
-// your first API endpoint... 
+// API Endpoints 
 app.post("/api/shorturl/new", function (req, res) {
   res.json({original_url: 'https://www.freecodecamp.org', short_url: 1});
 });
+
+app.get("/api/shorturl/<short_url>", function (req, res) {
+  
+});
+
 
 
 app.listen(port, function () {
