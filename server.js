@@ -26,15 +26,10 @@ app.get('/', function(req, res){
 });
 
   
-// API Endpoints 
-app.post("/api/shorturl/new", function (req, res) {
-  res.json({original_url: 'https://www.freecodecamp.org', short_url: 1});
-});
-
-app.get("/api/shorturl/<short_url>", function (req, res) {
-  
-});
-
+// your first API endpoint... 
+app.get("/api/hello", function (req, res) {
+  res.json({greeting: 'hello API'});
+}); 
 
 
 app.listen(port, function () {
@@ -43,3 +38,12 @@ app.listen(port, function () {
 
 // Database Connection
 let uri = process.env.DB_URI;
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+
+app.post("/api/shorturl/new", function (req, res) {
+  res.json({original_url: 'https://www.freecodecamp.org', short_url: 1});
+});
+
+app.get("/api/shorturl/<short_url>", function (req, res) {
+  
+});
