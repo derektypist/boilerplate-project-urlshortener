@@ -48,11 +48,54 @@ let urlSchema = new mongoose.Schema({
 let Url = mongoose.model('Url', urlSchema);
 
 let bodyParser = require('body-parser');
+let responseObject = {};
 
-app.post("/api/shorturl/new", function (req, res) {
-  res.json({original_url: 'https://www.freecodecamp.org', short_url: 1});
+app.post("/api/shorturl/new", bodyParser.urlencoded({extended: false}), function (req, res) {
+   let inputUrl = req.body['url'];
+   let urlRegex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
+
+   if (!inputUrl.match(urlRegex)) {
+     res.json({error: "invalid URL"});
+     return;
+   }
+
+   responseObject['original_url'] = inputUrl;
+   let inputShort = 1;
+   Url.findOne({})
+   .sort({short_url: 'desc'})
+   .exec(function (error, result) {
+     if (!error && result != undefined) {
+       inputShort = result.short_url + 1;
+     }
+
+    if (!error) {
+      Url.findOneAndUpdate(
+        {original_url: inputUrl},
+        {original_url: inputUrl, short_url: inputShort},
+        {new: true, upsert: true},
+        function (error, savedUrl) {
+          if (!error) {
+            responseObject['short_url'] = savedUrl.short_url;
+            res.json(responseObject);
+          }
+        }
+      );
+    }
+
+
+   });
+
 });
 
 app.get("/api/shorturl/<short_url>", function (req, res) {
-  
+  let input = req.params.short_url;
+  Url.findOne({short_url: input}, function (error, result) {
+    if (!error && result != undefined) {
+      res.redirect(res.original_url);
+    } else {
+      res.json("URL Not Found");
+    }
+  });
 });
+
+
