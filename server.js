@@ -47,6 +47,8 @@ let urlSchema = new mongoose.Schema({
 
 let Url = mongoose.model('Url', urlSchema);
 
+let bodyParser = require('body-parser');
+
 app.post("/api/shorturl/new", function (req, res) {
   res.json({original_url: 'https://www.freecodecamp.org', short_url: 1});
 });
