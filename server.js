@@ -50,12 +50,12 @@ let Url = mongoose.model('Url', urlSchema);
 let bodyParser = require('body-parser');
 let responseObject = {};
 
-app.post("/api/shorturl/new", bodyParser.urlencoded({extended: false}), function (req, res) {
+app.post("/api/shorturl/new", bodyParser.urlencoded({extended: false}), function (req, response) {
    let inputUrl = req.body['url'];
    let urlRegex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
 
    if (!inputUrl.match(urlRegex)) {
-     res.json({error: "invalid url"});
+     response.json({error: "invalid url"});
      return;
    }
 
@@ -87,13 +87,13 @@ app.post("/api/shorturl/new", bodyParser.urlencoded({extended: false}), function
 
 });
 
-app.get("/api/shorturl/<short_url>", function (req, res) {
+app.get("/api/shorturl/:short_url", function (req, response) {
   let input = req.params.short_url;
   Url.findOne({short_url: input}, function (error, result) {
     if (!error && result != undefined) {
-      res.redirect(res.original_url);
+      response.redirect(result.original_url);
     } else {
-      res.json("URL Not Found");
+      response.json("URL Not Found");
     }
   });
 });
