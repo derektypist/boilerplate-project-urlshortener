@@ -76,7 +76,7 @@ app.post("/api/shorturl/new", bodyParser.urlencoded({extended: false}), function
         function (error, savedUrl) {
           if (!error) {
             responseObject['short_url'] = savedUrl.short_url;
-            res.json(responseObject);
+            response.json(responseObject);
           }
         }
       );
